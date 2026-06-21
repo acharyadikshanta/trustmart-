@@ -10,7 +10,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/trustmart
     username: postgres
-    password: 12345
+    password: 1234
 
     hikari:
       pool-name: TrustMartPool
