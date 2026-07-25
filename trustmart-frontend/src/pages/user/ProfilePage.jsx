@@ -16,6 +16,13 @@ export default function ProfilePage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  // NEW: comment state 
+  const [comments, setComments] = useState([
+    { id: 1, text: 'Great profile!', timestamp: new Date().toLocaleString() },
+    { id: 2, text: 'Looking forward to your listings.', timestamp: new Date().toLocaleString() }
+  ]);
+  const [newComment, setNewComment] = useState('');
+
   useEffect(() => {
     if (user) {
       setName(user.name || '');
@@ -81,6 +88,21 @@ export default function ProfilePage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // ----- NEW: comment handlers -----
+  const handleAddComment = (e) => {
+    e.preventDefault();
+    if (newComment.trim() === '') return;
+    setComments([
+      ...comments,
+      {
+        id: Date.now(),
+        text: newComment.trim(),
+        timestamp: new Date().toLocaleString()
+      }
+    ]);
+    setNewComment('');
   };
 
   return (
@@ -233,6 +255,40 @@ export default function ProfilePage() {
           </form>
 
         </div>
+      </div>
+
+      {/* ----- NEW: Comment Section ----- */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Comments</h2>
+
+        <form onSubmit={handleAddComment} className="flex gap-2 mb-4">
+          <input
+            type="text"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Write a comment..."
+            className="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Add Comment
+          </button>
+        </form>
+
+        {comments.length === 0 ? (
+          <p className="text-gray-500 text-sm">No comments yet. Be the first!</p>
+        ) : (
+          <ul className="space-y-3">
+            {comments.map((comment) => (
+              <li key={comment.id} className="bg-gray-50 p-3 rounded-lg border">
+                <p className="text-gray-800">{comment.text}</p>
+                <span className="text-xs text-gray-400">{comment.timestamp}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
