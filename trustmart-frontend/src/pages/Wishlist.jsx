@@ -10,6 +10,13 @@ const Wishlist = () => {
   const [items, setItems] = useState(wishlistData);
   const [sortBy, setSortBy] = useState('newest');
 
+  // NEW: comment state 
+  const [comments, setComments] = useState([
+    { id: 1, text: "Great collection!", timestamp: new Date().toLocaleString() },
+    { id: 2, text: "Looking for more vintage items.", timestamp: new Date().toLocaleString() }
+  ]);
+  const [newComment, setNewComment] = useState('');
+
   // Remove Item
   const removeItem = (id) => {
     setItems(items.filter(item => item.id !== id));
@@ -28,6 +35,21 @@ const Wishlist = () => {
   };
 
   const sortedItems = getSortedItems();
+
+  // NEW: comment handlers 
+  const handleAddComment = (e) => {
+    e.preventDefault();
+    if (newComment.trim() === '') return;
+    setComments([
+      ...comments,
+      {
+        id: Date.now(),
+        text: newComment.trim(),
+        timestamp: new Date().toLocaleString()
+      }
+    ]);
+    setNewComment('');
+  };
 
   return (
     <div>
@@ -145,6 +167,42 @@ const Wishlist = () => {
           ))}
         </div>
       )}
+
+      {/* ----- NEW: Comment Section ----- */}
+      <div className="mt-10 border-t pt-6">
+        <h2 className="text-xl font-bold mb-4">Comments</h2>
+
+        {/* Comment Form */}
+        <form onSubmit={handleAddComment} className="flex gap-2 mb-4">
+          <input
+            type="text"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Write a comment..."
+            className="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Add Comment
+          </button>
+        </form>
+
+        {/* Comments List */}
+        {comments.length === 0 ? (
+          <p className="text-gray-500 text-sm">No comments yet. Be the first!</p>
+        ) : (
+          <ul className="space-y-3">
+            {comments.map((comment) => (
+              <li key={comment.id} className="bg-gray-50 p-3 rounded-lg border">
+                <p className="text-gray-800">{comment.text}</p>
+                <span className="text-xs text-gray-400">{comment.timestamp}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };
