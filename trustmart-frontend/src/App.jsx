@@ -7,6 +7,7 @@ import ForgetPasswordPage from "./pages/ForgetPasswordPage";
 import UserDashboard from "./pages/user/UserDashboard";
 import ChangePasswordPage from "./pages/user/ChangePasswordPage";
 import ProfilePage from "./pages/user/ProfilePage";
+import CategorySelect from './components/CategorySelect';
 
 const App = () => {
   const { isAuthenticated } = useAuth();
@@ -18,7 +19,8 @@ const App = () => {
       <Route path="/forgot-password" element={<ForgetPasswordPage />} />
       <Route path="/Change-password" element={<ChangePasswordPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-      <Route
+        <Route path="/Category" element={<CategorySelect />}  />    
+        <Route
         path="/"
         element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />}
       />
